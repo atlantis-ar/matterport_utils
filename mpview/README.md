@@ -8,7 +8,7 @@ This repository contains a version modiefied for the ATLANTIS project:
 - added mode to generate class/instance segmentation maps (`-seg_maps`) for each source view (can be fed into the same stitching pipeline). This mode will display a window, but is non-interactive and will save a set of files to disk and then terminate.
 - added/updated Visual Studio projects, ported to 64bit
 
-Modified 2020 by [JOANNEUM RESEARCH] (https://www.joanneum.at) as part of the [ATLANTIS H2020 project] (http://www.atlantis-ar.eu). This work is part of a project that has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreementNo 951900.
+Modified 2020 by [JOANNEUM RESEARCH] (https://www.joanneum.at) as part of the [ATLANTIS H2020 project] (http://www.atlantis-ar.eu). This work is part of a project that has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 951900.
 
 
 ## Usage

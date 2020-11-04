@@ -1,4 +1,13 @@
+# Created 2020 by JOANNEUM RESEARCH as part of the ATLANTIS H2020 project
+# https://www.joanneum.at
+# http://www.atlantis-ar.eu
+#
+# This tool is part of a project that has received funding from the European 
+# Union’s Horizon 2020 research and innovation programme under grant 
+# agreement No 951900.
+
 # ported and extended code from https://github.com/yindaz/PanoBasic
+
 import typing
 import numpy as np
 from numpy.linalg import inv
@@ -72,35 +81,43 @@ def combine_views(
     images: typing.List[np.array],
     v: np.array,
     outsize: typing.Tuple[int, int],
-    blending: bool=True
+    blending: bool=True,
+    depth: bool=False
 ):
     nchannels = images[0].shape[2]
     pano = np.zeros((outsize[1],outsize[0],nchannels))
     pano_w = np.zeros((outsize[1],outsize[0],nchannels))
     for i in range(len(images)):
+        if images[i].size < 3:
+            continue
         sphere_img, validMap = im2sphere(
-            images[i][imcutout[0][0]:imcutout[0][1],
-            imcutout[1][0]:imcutout[1][1]],
+            images[i][imcutout[0][0]:imcutout[0][1],imcutout[1][0]:imcutout[1][1]],
             default_fov, 
             outsize[0], 
             outsize[1], 
             v[i,0], 
             v[i,1], 
             blending,
-            i
-        )  
-        sphere_img[validMap.astype(np.uint8)==0] = 0        
+            i,
+            depth
+        )         
+        sphere_img[validMap<0.00000001] = 0
         if blending:
             pano = pano + sphere_img
         else:
-            pano[sphere_img>0] = sphere_img[sphere_img > 0] 
+            if depth:
+                sphere_img[:,:,0] = sphere_img[:,:,0] * validMap
+                pano = pano + sphere_img 
+
+            else:
+                pano[sphereImg>0] = sphereImg[sphereImg>0] 
         pano_w[:,:,0] = pano_w[:,:,0] + validMap
         if nchannels>1:
             pano_w[:,:,1] = pano_w[:,:,1] + validMap
             pano_w[:,:,2] = pano_w[:,:,2] + validMap
     pano[pano_w==0] = 0
     pano_w[pano_w==0] = 1
-    if blending:
+    if blending or depth:
         pano = np.divide(pano, pano_w)
     return pano
 
@@ -112,7 +129,8 @@ def im2sphere(
     x: float,
     y: float,
     interpolate: bool,
-    nr: int
+    nr: int,
+    weightByCenterDist: bool = False
 ):
     # map pixel in panorama to viewing direction
     TX, TY = np.meshgrid(np.array(range(sphereW)), np.array(range(sphereH)))
@@ -154,7 +172,22 @@ def im2sphere(
     sphere_img = warp_image_fast(im, Px, Py, interpolate, (sphereW, sphereH), nr)
     validMap = np.zeros((sphere_img.shape[0], sphere_img.shape[1]))
     validMap[:,:] = np.logical_not(np.isnan(sphere_img[:,:,0])).astype(float)
-    validMap[sphere_img[:,:,0] < 0] = 0
+
+    if weightByCenterDist:
+        weightIm = np.zeros((im.shape[0],im.shape[1],1))
+        c0 = im.shape[0] / 2
+        c1 = im.shape[1] / 2
+        for i in range(im.shape[0]):
+            for j in range(im.shape[1]):
+                weightIm[i,j,0] = (1 - abs(c0 - i)/c0) * (1 - abs(c1 - j)/c1)
+                
+        weightImWarped = warp_image_fast(weightIm, Px, Py,False,(sphereW,sphereH),nr)
+
+        validMap = weightImWarped[:,:,0]
+        validMap[sphere_img[:,:,0]<1] = 0
+
+    else:
+        validMap[sphere_img[:,:,0]<0] = 0
     # view direction: [alpha belta gamma]
     # contacting point direction: [x0 y0 z0]
     # so division>0 are valid region

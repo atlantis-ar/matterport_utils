@@ -29,4 +29,4 @@ The basis of the implementation is ported from [PanoBasic](https://github.com/yi
 
 
 
-Created 2020 by [JOANNEUM RESEARCH](https://www.joanneum.at) as part of the [ATLANTIS H2020 project](http://www.atlantis-ar.eu). This work is part of a project that has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 951900.
+Created 2020 by [JOANNEUM RESEARCH](https://www.joanneum.at) and [CERTH ITI](https://www.iti.gr/iti/index.html) as part of the [ATLANTIS H2020 project](http://www.atlantis-ar.eu). This work is part of a project that has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 951900.

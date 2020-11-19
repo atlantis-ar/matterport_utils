@@ -26,8 +26,7 @@ import math
 log = logging.getLogger(__name__)
 
 def unzip(basedir,filename):
-    print("unpacking "+basedir+"/"+filename)
-    with zipfile.ZipFile(basedir+"/"+filename, 'r') as zip_ref:
+    with zipfile.ZipFile(os.path.join(basedir, filename), 'r') as zip_ref:
         zip_ref.extractall(basedir)
 
 def parse_camera_params(filename: str) -> dict:
@@ -58,7 +57,6 @@ def parse_camera_params(filename: str) -> dict:
 
 
 def correct_depth_distortion(depth_img_in):
-    
     depth_img = copy.deepcopy(depth_img_in)
     
     c1 = depth_img.shape[1]/2
@@ -142,7 +140,7 @@ def process_file_type(
             eqrar = py360convert.c2e(facelist, equirect_size[1], equirect_size[0], mode='bilinear', cube_format='list')
             eqrar = np.fliplr(eqrar)
             eqrimg = Image.fromarray(eqrar.astype(np.uint8))            
-            eqrimg.save(os.path.join(out_dir, name, location + ".jpg"))
+            eqrimg.save(os.path.join(out_dir, name, location + ".png"))
         else:
             v = createpano.get_angles(paramdict[location])
             blending = True
@@ -177,7 +175,7 @@ def process_file_type(
                 eqrimg.save(os.path.join(out_dir, name, location + ".png"), "PNG", compress_level=0)
             else:
                 eqrimg = Image.fromarray(eqrar.astype(np.uint8))
-                eqrimg.save(os.path.join(out_dir, name, location + ".jpg"))
+                eqrimg.save(os.path.join(out_dir, name, location + ".png"))
 
 def process_scan(m3d_path, out_path, scan_id, types, unpack, warp_depth) -> None:      
     if unpack:

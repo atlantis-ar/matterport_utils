@@ -4,7 +4,7 @@ Script to create COCO style annotations from Matterport instance labels, using e
 
 Note that COCO labels use linear numbering for the 80 classes.
 
-Requires [https://github.com/waspinator/pycococreator/tree/master/pycococreatortools](pycococreatortools)
+Requires [https://github.com/waspinator/pycococreator/tree/master/pycococreatortools] (pycococreatortools)
 
 ## Usage
 
@@ -30,7 +30,11 @@ advanced options:
 ## Examples
 
 ```
+<<<<<<< HEAD
 # one house with COCO labels
+=======
+# one houses with COCO labels
+>>>>>>> d20f78b8f005b34e3c63c740de9f8e3661f9f4c0
 
 matterport-to-coco.py --matterport_root_dir datasets/Matterport/v1 --matterport_scene_dir equirect --matterport_annotation_dir ply --coco_annotation_dir datasets/Matterport/v1/coco_format --coco_annotation_file matterport_test_coco.json --class_labels coco --matterport_house_id 2t7WUuJeko7 
 ```

@@ -4,7 +4,7 @@ Script to create COCO style annotations from Matterport instance labels, using e
 
 Note that COCO labels use linear numbering for the 80 classes.
 
-Requires [https://github.com/waspinator/pycococreator/tree/master/pycococreatortools] (pycococreatortools)
+Requires [pycococreatortools](https://github.com/waspinator/pycococreator/tree/master/pycococreatortools)
 
 ## Usage
 

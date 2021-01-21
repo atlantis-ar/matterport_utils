@@ -778,9 +778,10 @@ void GLUTRedraw(void)
   // Set viewing transformation
   if (snap_image) {
     // Set viewport
-	// BAW
+	// BAW changed to ensure full window is filled
     //glViewport(0, 0, snap_image->width/2, snap_image->height/2);
-	glViewport(0, 0, snap_image->width , snap_image->height );
+	//glViewport(0, 0, snap_image->width , snap_image->height );
+	glViewport(0, 0, GLUTwindow_width , GLUTwindow_height);
 
     // Set perspective transformation
     glMatrixMode(GL_PROJECTION);
